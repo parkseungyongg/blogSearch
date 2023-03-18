@@ -1,6 +1,6 @@
 package com.blog.search.dto;
 
-import com.blog.search.model.Documents;
+import com.blog.search.model.Document;
 import com.blog.search.model.Meta;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,5 +15,5 @@ import java.util.List;
 @NoArgsConstructor
 public class SearchBlogResponse {
     private Meta meta;
-    private List<Documents> documents;
+    private List<Document> documents;
 }

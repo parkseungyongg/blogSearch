@@ -1,24 +1,19 @@
 package com.blog.search.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.blog.search.model.BlogSortType;
+import lombok.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 public class SearchBlogRequest {
     private final String query;
     private final Integer page;
     private final Integer size;
-    private final SortType sort;
-
-    public SearchBlogRequest(String query, Integer page, Integer size, SortType sort) {
-        this.query = query;
-        this.page = page;
-        this.size = size;
-        this.sort = sort;
-    }
+    private final BlogSortType sort;
 
     public MultiValueMap<String, String> toParams() {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -37,17 +32,5 @@ public class SearchBlogRequest {
         return params;
     }
 
-    public enum SortType {
-        ACCURACY("accuracy"), LATEST("recency");
 
-        private final String value;
-
-        SortType(String value) {
-            this.value = value;
-        }
-
-        public String getValue() {
-            return value;
-        }
-    }
 }

@@ -1,9 +1,14 @@
-package com.blog.search.model;
+package com.blog.search.dto;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-public class Documents {
+@Setter
+@Builder
+public class BlogSearchResponse {
+
     private String title;
     private String contents;
     private String url;
