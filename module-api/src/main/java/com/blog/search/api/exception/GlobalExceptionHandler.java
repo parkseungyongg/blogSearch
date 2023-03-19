@@ -16,4 +16,13 @@ public class GlobalExceptionHandler {
         errorResponse.setMessage(e.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(NaverApiException.class)
+    public ResponseEntity<ErrorResponse> handleNaverApiException(NaverApiException e) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorCode("SERVER_ERROR");
+        errorResponse.setStatus(500);
+        errorResponse.setMessage(e.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

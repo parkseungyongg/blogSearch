@@ -49,7 +49,7 @@ public class BlogSearchService {
                 .page(blogSearchRequestDto.getPage())
                 .size(blogSearchRequestDto.getSize())
                 .totalElements(response.getMeta().getTotalCount())
-                .totalPages(response.getMeta().getTotalCount() / blogSearchRequestDto.getSize())
+                .totalPages((int) Math.ceil((double) response.getMeta().getTotalCount() / blogSearchRequestDto.getSize()))
                 .sortType(blogSearchRequestDto.getSort())
                 .build();
 

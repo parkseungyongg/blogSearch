@@ -3,6 +3,7 @@ package com.blog.search.api.service;
 import com.blog.search.api.dto.BlogSearchRequest;
 import com.blog.search.api.dto.KakaoBlogSearchResponse;
 import com.blog.search.api.exception.KakaoApiException;
+import com.blog.search.api.model.ProviderType;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,7 @@ public class KakaoBlogSearchService {
     public KakaoBlogSearchResponse searchBlog(BlogSearchRequest request) {
         String uri = UriComponentsBuilder.fromUriString(kakaoApiUrl)
                 .path("/v2/search/blog")
-                .queryParams(request.toParams())
+                .queryParams(request.toParams(ProviderType.KAKAO))
                 .build()
                 .toString();
 
