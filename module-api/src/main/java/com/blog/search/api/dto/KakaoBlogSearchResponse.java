@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchBlogResponse {
+public class KakaoBlogSearchResponse {
     private Meta meta;
     private List<Document> documents;
 }

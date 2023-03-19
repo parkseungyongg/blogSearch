@@ -1,11 +1,10 @@
 package com.blog.search.api.service;
 
-import com.blog.search.api.dto.BlogSearchResponse;
-import com.blog.search.api.dto.SearchBlogRequest;
-import com.blog.search.api.dto.SearchBlogResponse;
-import com.blog.search.api.dto.SearchResult;
-import com.blog.search.api.model.BlogSortType;
+import com.blog.search.api.dto.*;
 import com.blog.search.service.SearchKeywordService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,24 +12,24 @@ import java.util.stream.Collectors;
 
 @Service
 public class BlogSearchService {
-    private final KakaoSearchService kakaoSearchService;
+    private final KakaoBlogSearchService kakaoBlogSearchService;
     private final SearchKeywordService searchKeywordService;
 
-    public BlogSearchService(KakaoSearchService kakaoSearchService, SearchKeywordService searchKeywordService) {
-        this.kakaoSearchService = kakaoSearchService;
+    public BlogSearchService(KakaoBlogSearchService kakaoBlogSearchService, SearchKeywordService searchKeywordService) {
+        this.kakaoBlogSearchService = kakaoBlogSearchService;
         this.searchKeywordService = searchKeywordService;
     }
 
-    public SearchResult searchBlogs(String query, BlogSortType sortType, int page, int size) {
-        SearchBlogRequest request = SearchBlogRequest.builder()
-                .query(query)
-                .sort(sortType)
-                .page(page)
-                .size(size)
+    public BlogSearchResult searchBlogs(BlogSearchRequestDto blogSearchRequestDto) {
+        BlogSearchRequest request = BlogSearchRequest.builder()
+                .query(blogSearchRequestDto.getQuery())
+                .sort(blogSearchRequestDto.getSort())
+                .page(blogSearchRequestDto.getPage())
+                .size(blogSearchRequestDto.getSize())
                 .build();
 
-        SearchBlogResponse response = kakaoSearchService.searchBlog(request);
-        searchKeywordService.updateSearchKeyword(query);
+        KakaoBlogSearchResponse response = kakaoBlogSearchService.searchBlog(request);
+        searchKeywordService.updateSearchKeyword(blogSearchRequestDto.getQuery());
 
         List<BlogSearchResponse> items = response.getDocuments().stream()
                 .map(document -> BlogSearchResponse.builder()
@@ -44,12 +43,13 @@ public class BlogSearchService {
                 )
                 .collect(Collectors.toList());
 
-        return SearchResult.builder()
+        return BlogSearchResult.builder()
                 .items(items)
-                .page(page)
-                .size(size)
+                .page(blogSearchRequestDto.getPage())
+                .size(blogSearchRequestDto.getSize())
                 .totalElements(response.getMeta().getTotalCount())
-                .totalPages(response.getMeta().getTotalCount())
+                .totalPages(response.getMeta().getPageableCount())
+                .sortType(blogSearchRequestDto.getSort())
                 .build();
     }
 }

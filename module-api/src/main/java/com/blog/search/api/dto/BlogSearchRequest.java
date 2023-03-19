@@ -12,7 +12,7 @@ import org.springframework.util.MultiValueMap;
 @Setter
 @Builder
 @AllArgsConstructor
-public class SearchBlogRequest {
+public class BlogSearchRequest {
     private final String query;
     private final Integer page;
     private final Integer size;

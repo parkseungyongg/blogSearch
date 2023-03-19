@@ -1,7 +1,7 @@
 package com.blog.search.api.service;
 
-import com.blog.search.api.dto.SearchBlogRequest;
-import com.blog.search.api.dto.SearchBlogResponse;
+import com.blog.search.api.dto.BlogSearchRequest;
+import com.blog.search.api.dto.KakaoBlogSearchResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -19,21 +19,21 @@ import java.io.IOException;
 
 @Service
 @Slf4j
-public class KakaoSearchService {
+public class KakaoBlogSearchService {
     private final RestTemplate restTemplate;
     private final String kakaoApiUrl;
     private final String restKey;
 
     @Autowired
-    public KakaoSearchService(RestTemplate restTemplate,
-                              @Value("${kakao.api.url}") String kakaoApiUrl,
-                              @Value("${kakao.api.rest-key}") String restKey) {
+    public KakaoBlogSearchService(RestTemplate restTemplate,
+                                  @Value("${kakao.api.url}") String kakaoApiUrl,
+                                  @Value("${kakao.api.rest-key}") String restKey) {
         this.restTemplate = restTemplate;
         this.kakaoApiUrl = kakaoApiUrl;
         this.restKey = restKey;
     }
 
-    public SearchBlogResponse searchBlog(SearchBlogRequest request) {
+    public KakaoBlogSearchResponse searchBlog(BlogSearchRequest request) {
         String uri = UriComponentsBuilder.fromUriString(kakaoApiUrl)
                 .path("/v2/search/blog")
                 .queryParams(request.toParams())
@@ -49,13 +49,13 @@ public class KakaoSearchService {
 
         ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
         ObjectMapper objectMapper = new ObjectMapper();
-        SearchBlogResponse searchBlogResponse;
+        KakaoBlogSearchResponse kakaoBlogSearchResponse;
         try {
             log.info("getBody={}", response.getBody());
-            searchBlogResponse = objectMapper.readValue(response.getBody(), new TypeReference<SearchBlogResponse>(){});
+            kakaoBlogSearchResponse = objectMapper.readValue(response.getBody(), new TypeReference<KakaoBlogSearchResponse>(){});
         } catch(IOException e) {
             throw new RuntimeException("카카오 API 응답을 읽을 수 없습니다.", e);
         }
-        return searchBlogResponse;
+        return kakaoBlogSearchResponse;
     }
 }

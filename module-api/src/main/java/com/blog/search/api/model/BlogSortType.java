@@ -1,7 +1,7 @@
 package com.blog.search.api.model;
 
 public enum BlogSortType {
-    ACCURACY("accuracy"), LATEST("recency");
+    ACCURACY("accuracy"), RECENCY("recency");
 
     private final String value;
 
