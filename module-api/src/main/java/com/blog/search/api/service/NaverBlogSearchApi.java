@@ -1,6 +1,8 @@
 package com.blog.search.api.service;
 
 import com.blog.search.api.dto.BlogSearchRequest;
+import com.blog.search.api.dto.BlogSearchResponse;
+import com.blog.search.api.dto.BlogSearchResult;
 import com.blog.search.api.dto.NaverBlogSearchResponse;
 import com.blog.search.api.exception.NaverApiException;
 import com.blog.search.api.model.ProviderType;
@@ -18,27 +20,29 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class NaverBlogSearchService {
+public class NaverBlogSearchApi implements BlogSearchApi {
     private final RestTemplate restTemplate;
     private final String naverApiUrl;
     private final String naverClientId;
     private final String naverClientSecret;
 
     @Autowired
-    public NaverBlogSearchService(RestTemplate restTemplate,
-                                  @Value("${naver.api.url}") String naverApiUrl,
-                                  @Value("${naver.api.client-id}") String naverClientId,
-                                  @Value("${naver.api.client-secret}") String naverClientSecret) {
+    public NaverBlogSearchApi(RestTemplate restTemplate,
+                              @Value("${naver.api.url}") String naverApiUrl,
+                              @Value("${naver.api.client-id}") String naverClientId,
+                              @Value("${naver.api.client-secret}") String naverClientSecret) {
         this.restTemplate = restTemplate;
         this.naverApiUrl = naverApiUrl;
         this.naverClientId = naverClientId;
         this.naverClientSecret = naverClientSecret;
     }
 
-    public NaverBlogSearchResponse searchBlog(BlogSearchRequest request) {
+    public BlogSearchResult searchBlog(BlogSearchRequest request) {
         String uri = UriComponentsBuilder.fromUriString(naverApiUrl)
                 .path("/v1/search/blog")
                 .queryParams(request.toParams(ProviderType.NAVER))
@@ -63,6 +67,23 @@ public class NaverBlogSearchService {
         } catch (IOException e) {
             throw new NaverApiException("Naver API 응답을 읽을 수 없습니다.", e);
         }
-        return naverBlogSearchResponse;
+
+        List<BlogSearchResponse> items = naverBlogSearchResponse.getItems().stream()
+                .map(item -> BlogSearchResponse.builder()
+                        .title(item.getTitle())
+                        .url(item.getBloggerlink())
+                        .contents(item.getDescription())
+                        .blogname(item.getBloggername())
+                        .build())
+                .collect(Collectors.toList());
+
+        return BlogSearchResult.builder()
+                .items(items)
+                .size(request.getSize())
+                .page(request.getPage())
+                .sortType(request.getSort())
+                .totalPages(naverBlogSearchResponse.getTotal() / request.getSize())
+                .totalElements(naverBlogSearchResponse.getTotal())
+                .build();
     }
 }

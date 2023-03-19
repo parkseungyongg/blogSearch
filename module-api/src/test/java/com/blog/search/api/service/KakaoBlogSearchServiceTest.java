@@ -1,7 +1,7 @@
 package com.blog.search.api.service;
 
 import com.blog.search.api.dto.BlogSearchRequest;
-import com.blog.search.api.dto.KakaoBlogSearchResponse;
+import com.blog.search.api.dto.BlogSearchResult;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,19 +15,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 class KakaoBlogSearchServiceTest {
     @Autowired
-    KakaoBlogSearchService kakaoBlogSearchService;
+    KakaoBlogSearchApi kakaoBlogSearchApi;
 
     @Test
     public void searchBlogTest() throws Exception {
         // given
         String query = "스프링";
-        BlogSearchRequest request = new BlogSearchRequest(query, null, null, null);
+
+        BlogSearchRequest request = BlogSearchRequest.builder()
+                .query("스프링")
+                .page(1)
+                .size(10)
+                .build();
 
         //when
-        KakaoBlogSearchResponse kakaoBlogSearchResponse = kakaoBlogSearchService.searchBlog(request);
+        BlogSearchResult blogSearchResult = kakaoBlogSearchApi.searchBlog(request);
 
         //then
-        assertThat(kakaoBlogSearchResponse.getDocuments()).isNotEmpty();
-        assertThat(kakaoBlogSearchResponse.getDocuments().get(0).getContents()).contains(query);
+        assertThat(blogSearchResult.getItems()).isNotEmpty();
+        assertThat(blogSearchResult.getItems().get(0).getContents()).contains(query);
     }
 }

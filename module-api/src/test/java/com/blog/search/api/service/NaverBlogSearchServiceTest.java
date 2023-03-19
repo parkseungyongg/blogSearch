@@ -1,7 +1,7 @@
 package com.blog.search.api.service;
 
 import com.blog.search.api.dto.BlogSearchRequest;
-import com.blog.search.api.dto.NaverBlogSearchResponse;
+import com.blog.search.api.dto.BlogSearchResult;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,20 +14,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 class NaverBlogSearchServiceTest {
     @Autowired
-    NaverBlogSearchService naverBlogSearchService;
+    NaverBlogSearchApi naverBlogSearchApi;
 
     @Test
     public void searchBlogTest() throws Exception {
         // given
         String query = "스프링";
-        BlogSearchRequest request = new BlogSearchRequest(query, null, null, null);
+        BlogSearchRequest request = BlogSearchRequest.builder()
+                .query("스프링")
+                .page(1)
+                .size(10)
+                .build();
 
         //when
-        NaverBlogSearchResponse naverBlogSearchResponse = naverBlogSearchService.searchBlog(request);
+        BlogSearchResult blogSearchResult = naverBlogSearchApi.searchBlog(request);
 
         //then
-        System.out.println("naverBlogSearchResponse = " + naverBlogSearchResponse.toString());
-        assertThat(naverBlogSearchResponse.getItems()).isNotEmpty();
-        assertThat(naverBlogSearchResponse.getItems().get(0).getDescription()).contains(query);
+        assertThat(blogSearchResult.getItems()).isNotEmpty();
+        assertThat(blogSearchResult.getItems().get(0).getContents()).contains(query);
     }
 }

@@ -22,7 +22,7 @@ public class BlogSearchRequest {
         params.add(provider.getQueryKey(), query);
 
         if (sort != null) {
-            params.add(provider.getSortKey(), getSortValue(provider));
+            params.add(provider.getSortKey(), provider.getSortValue(sort));
         }
         if (size != null) {
             params.add(provider.getSizeKey(), String.valueOf(size));
@@ -31,18 +31,5 @@ public class BlogSearchRequest {
             params.add(provider.getPageKey(), String.valueOf(page));
         }
         return params;
-    }
-
-    private String getSortValue(ProviderType provider) {
-        if (provider == ProviderType.NAVER) {
-            if (sort.getValue().equals("ACCURACY")) {
-                return "SIM";
-            } else if(sort.getValue().equals("LATENCY")) {
-                return "DATE";
-            }
-        } else {
-            return sort.getValue();
-        }
-        return "";
     }
 }

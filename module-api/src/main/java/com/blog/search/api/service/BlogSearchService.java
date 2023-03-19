@@ -1,60 +1,44 @@
 package com.blog.search.api.service;
 
-import com.blog.search.api.dto.*;
+import com.blog.search.api.dto.BlogSearchRequest;
+import com.blog.search.api.dto.BlogSearchRequestDto;
+import com.blog.search.api.dto.BlogSearchResult;
 import com.blog.search.core.service.SearchKeywordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class BlogSearchService {
-    private final KakaoBlogSearchService kakaoBlogSearchService;
     private final SearchKeywordService searchKeywordService;
+    private final List<BlogSearchApi> apis;
 
-    public BlogSearchService(KakaoBlogSearchService kakaoBlogSearchService, SearchKeywordService searchKeywordService) {
-        this.kakaoBlogSearchService = kakaoBlogSearchService;
+    public BlogSearchService(SearchKeywordService searchKeywordService, List<BlogSearchApi> apis) {
         this.searchKeywordService = searchKeywordService;
+        this.apis = apis;
     }
 
     public BlogSearchResult searchBlogs(BlogSearchRequestDto blogSearchRequestDto) {
         BlogSearchRequest request = BlogSearchRequest.builder()
+                .page(blogSearchRequestDto.getPage())
                 .query(blogSearchRequestDto.getQuery())
+                .size(blogSearchRequestDto.getSize())
                 .sort(blogSearchRequestDto.getSort())
-                .page(blogSearchRequestDto.getPage())
-                .size(blogSearchRequestDto.getSize())
                 .build();
 
-//        log.info("searchBlogs request={}", request.toString());
-
-        KakaoBlogSearchResponse response = kakaoBlogSearchService.searchBlog(request);
-        searchKeywordService.updateSearchKeyword(blogSearchRequestDto.getQuery());
-
-        List<BlogSearchResponse> items = response.getDocuments().stream()
-                .map(document -> BlogSearchResponse.builder()
-                        .title(document.getTitle())
-                        .contents(document.getContents())
-                        .url(document.getUrl())
-                        .blogname(document.getBlogname())
-                        .datetime(document.getDatetime())
-                        .thumbnail(document.getThumbnail())
-                        .build()
-                )
-                .collect(Collectors.toList());
-
-        BlogSearchResult blogSearchResult = BlogSearchResult.builder()
-                .items(items)
-                .page(blogSearchRequestDto.getPage())
-                .size(blogSearchRequestDto.getSize())
-                .totalElements(response.getMeta().getTotalCount())
-                .totalPages((int) Math.ceil((double) response.getMeta().getTotalCount() / blogSearchRequestDto.getSize()))
-                .sortType(blogSearchRequestDto.getSort())
-                .build();
-
-//        log.info("blogSearchResult={}", blogSearchResult.toString());
-
-        return blogSearchResult;
+        BlogSearchResult result = null;
+        for(BlogSearchApi api : apis) {
+            try {
+                result = api.searchBlog(request);
+                searchKeywordService.updateSearchKeyword(blogSearchRequestDto.getQuery());
+                break;
+            } catch(Exception e) {
+                // API 호출에 실패한 경우 다음 API를 호출합니다.
+                log.info("호출 실패: {}", api.getClass());
+            }
+        }
+        return result;
     }
 }

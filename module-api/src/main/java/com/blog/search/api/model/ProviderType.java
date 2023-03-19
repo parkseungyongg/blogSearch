@@ -14,4 +14,17 @@ public enum ProviderType {
     private final String sizeKey;
     private final String pageKey;
 
+    public String getSortValue(BlogSortType blogSortType) {
+        if (this == NAVER) {
+            if (blogSortType == BlogSortType.ACCURACY) {
+                return "sim";
+            } else if (blogSortType == BlogSortType.RECENCY) {
+                return "date";
+            }
+        } else if (this == KAKAO) {
+            return blogSortType.getValue();
+        }
+
+        throw new IllegalArgumentException("Unsupported ProviderType: " + this);
+    }
 }

@@ -1,6 +1,8 @@
 package com.blog.search.api.service;
 
 import com.blog.search.api.dto.BlogSearchRequest;
+import com.blog.search.api.dto.BlogSearchResponse;
+import com.blog.search.api.dto.BlogSearchResult;
 import com.blog.search.api.dto.KakaoBlogSearchResponse;
 import com.blog.search.api.exception.KakaoApiException;
 import com.blog.search.api.model.ProviderType;
@@ -18,16 +20,18 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class KakaoBlogSearchService {
+public class KakaoBlogSearchApi implements BlogSearchApi {
     private final RestTemplate restTemplate;
     private final String kakaoApiUrl;
     private final String restKey;
 
     @Autowired
-    public KakaoBlogSearchService(RestTemplate restTemplate,
+    public KakaoBlogSearchApi(RestTemplate restTemplate,
                                   @Value("${kakao.api.url}") String kakaoApiUrl,
                                   @Value("${kakao.api.rest-key}") String restKey) {
         this.restTemplate = restTemplate;
@@ -35,7 +39,7 @@ public class KakaoBlogSearchService {
         this.restKey = restKey;
     }
 
-    public KakaoBlogSearchResponse searchBlog(BlogSearchRequest request) {
+    public BlogSearchResult searchBlog(BlogSearchRequest request) {
         String uri = UriComponentsBuilder.fromUriString(kakaoApiUrl)
                 .path("/v2/search/blog")
                 .queryParams(request.toParams(ProviderType.KAKAO))
@@ -58,6 +62,27 @@ public class KakaoBlogSearchService {
         } catch(IOException e) {
             throw new KakaoApiException("카카오 API 응답을 읽을 수 없습니다.", e);
         }
-        return kakaoBlogSearchResponse;
+
+        List<BlogSearchResponse> items = kakaoBlogSearchResponse.getDocuments().stream()
+                .map(document -> BlogSearchResponse
+                        .builder()
+                        .title(document.getTitle())
+                        .blogname(document.getBlogname())
+                        .contents(document.getContents())
+                        .datetime(document.getDatetime())
+                        .thumbnail(document.getThumbnail())
+                        .url(document.getUrl())
+                        .build()
+                )
+                .collect(Collectors.toList());
+
+        return BlogSearchResult.builder()
+                .items(items)
+                .page(request.getPage())
+                .size(request.getSize())
+                .totalElements(kakaoBlogSearchResponse.getMeta().getTotalCount())
+                .totalPages(kakaoBlogSearchResponse.getMeta().getTotalCount() / request.getSize())
+                .sortType(request.getSort())
+                .build();
     }
 }
