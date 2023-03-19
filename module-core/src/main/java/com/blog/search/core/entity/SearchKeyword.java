@@ -1,4 +1,4 @@
-package com.blog.search.entity;
+package com.blog.search.core.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

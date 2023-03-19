@@ -1,15 +1,14 @@
 package com.blog.search.api.service;
 
 import com.blog.search.api.dto.*;
-import com.blog.search.service.SearchKeywordService;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import com.blog.search.core.service.SearchKeywordService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class BlogSearchService {
     private final KakaoBlogSearchService kakaoBlogSearchService;
@@ -28,6 +27,8 @@ public class BlogSearchService {
                 .size(blogSearchRequestDto.getSize())
                 .build();
 
+//        log.info("searchBlogs request={}", request.toString());
+
         KakaoBlogSearchResponse response = kakaoBlogSearchService.searchBlog(request);
         searchKeywordService.updateSearchKeyword(blogSearchRequestDto.getQuery());
 
@@ -43,13 +44,17 @@ public class BlogSearchService {
                 )
                 .collect(Collectors.toList());
 
-        return BlogSearchResult.builder()
+        BlogSearchResult blogSearchResult = BlogSearchResult.builder()
                 .items(items)
                 .page(blogSearchRequestDto.getPage())
                 .size(blogSearchRequestDto.getSize())
                 .totalElements(response.getMeta().getTotalCount())
-                .totalPages(response.getMeta().getPageableCount())
+                .totalPages(response.getMeta().getTotalCount() / blogSearchRequestDto.getSize())
                 .sortType(blogSearchRequestDto.getSort())
                 .build();
+
+//        log.info("blogSearchResult={}", blogSearchResult.toString());
+
+        return blogSearchResult;
     }
 }

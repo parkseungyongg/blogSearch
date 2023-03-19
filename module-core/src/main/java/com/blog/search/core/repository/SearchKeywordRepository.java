@@ -1,6 +1,6 @@
-package com.blog.search.repository;
+package com.blog.search.core.repository;
 
-import com.blog.search.entity.SearchKeyword;
+import com.blog.search.core.entity.SearchKeyword;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

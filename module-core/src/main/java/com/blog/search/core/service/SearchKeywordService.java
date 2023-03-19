@@ -1,8 +1,8 @@
-package com.blog.search.service;
+package com.blog.search.core.service;
 
-import com.blog.search.dto.SearchKeywordResponse;
-import com.blog.search.entity.SearchKeyword;
-import com.blog.search.repository.SearchKeywordRepository;
+import com.blog.search.core.dto.SearchKeywordResponse;
+import com.blog.search.core.entity.SearchKeyword;
+import com.blog.search.core.repository.SearchKeywordRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

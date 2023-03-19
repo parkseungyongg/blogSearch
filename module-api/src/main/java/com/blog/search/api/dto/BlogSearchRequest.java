@@ -1,10 +1,7 @@
 package com.blog.search.api.dto;
 
 import com.blog.search.api.model.BlogSortType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -12,6 +9,7 @@ import org.springframework.util.MultiValueMap;
 @Setter
 @Builder
 @AllArgsConstructor
+@ToString
 public class BlogSearchRequest {
     private final String query;
     private final Integer page;

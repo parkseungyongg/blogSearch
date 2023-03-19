@@ -1,4 +1,4 @@
-package com.blog.search.dto;
+package com.blog.search.core.dto;
 
 
 import lombok.Builder;

@@ -2,6 +2,7 @@ package com.blog.search.api.service;
 
 import com.blog.search.api.dto.BlogSearchRequest;
 import com.blog.search.api.dto.KakaoBlogSearchResponse;
+import com.blog.search.api.exception.KakaoApiException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,7 @@ public class KakaoBlogSearchService {
                 .build()
                 .toString();
 
-        log.info("uri={}", uri);
+        log.debug("Kakao API URI={}", uri);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "KakaoAK " + restKey);
@@ -51,10 +52,10 @@ public class KakaoBlogSearchService {
         ObjectMapper objectMapper = new ObjectMapper();
         KakaoBlogSearchResponse kakaoBlogSearchResponse;
         try {
-            log.info("getBody={}", response.getBody());
+            log.debug("Kakao API response body={}", response.getBody());
             kakaoBlogSearchResponse = objectMapper.readValue(response.getBody(), new TypeReference<KakaoBlogSearchResponse>(){});
         } catch(IOException e) {
-            throw new RuntimeException("카카오 API 응답을 읽을 수 없습니다.", e);
+            throw new KakaoApiException("카카오 API 응답을 읽을 수 없습니다.", e);
         }
         return kakaoBlogSearchResponse;
     }
