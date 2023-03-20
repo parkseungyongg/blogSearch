@@ -1,5 +1,6 @@
 package com.blog.search.core.service;
 
+import com.blog.search.SearchBlogCoreApplication;
 import com.blog.search.core.dto.SearchKeywordResponse;
 import com.blog.search.core.entity.SearchKeyword;
 import com.blog.search.core.repository.SearchKeywordRepository;
@@ -16,7 +17,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = SearchBlogCoreApplication.class)
 class SearchKeywordServiceTest {
 
     @Autowired

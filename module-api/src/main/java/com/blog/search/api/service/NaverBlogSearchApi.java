@@ -82,7 +82,7 @@ public class NaverBlogSearchApi implements BlogSearchApi {
                 .size(request.getSize())
                 .page(request.getPage())
                 .sortType(request.getSort())
-                .totalPages(naverBlogSearchResponse.getTotal() / request.getSize())
+                .totalPages((int) Math.ceil((double) naverBlogSearchResponse.getTotal() / request.getSize()))
                 .totalElements(naverBlogSearchResponse.getTotal())
                 .build();
     }

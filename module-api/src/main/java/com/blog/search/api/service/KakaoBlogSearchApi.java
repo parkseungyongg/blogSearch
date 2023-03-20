@@ -81,7 +81,7 @@ public class KakaoBlogSearchApi implements BlogSearchApi {
                 .page(request.getPage())
                 .size(request.getSize())
                 .totalElements(kakaoBlogSearchResponse.getMeta().getTotalCount())
-                .totalPages(kakaoBlogSearchResponse.getMeta().getTotalCount() / request.getSize())
+                .totalPages((int) Math.ceil((double) kakaoBlogSearchResponse.getMeta().getTotalCount() / request.getSize()))
                 .sortType(request.getSort())
                 .build();
     }

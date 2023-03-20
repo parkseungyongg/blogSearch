@@ -25,4 +25,13 @@ public class GlobalExceptionHandler {
         errorResponse.setMessage(e.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<ErrorResponse> handleApiException(ApiException e) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorCode("SERVER_ERROR");
+        errorResponse.setStatus(500);
+        errorResponse.setMessage(e.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

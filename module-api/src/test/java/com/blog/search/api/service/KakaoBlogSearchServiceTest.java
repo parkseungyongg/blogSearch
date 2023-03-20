@@ -1,7 +1,9 @@
 package com.blog.search.api.service;
 
+import com.blog.search.SearchBlogApiApplication;
 import com.blog.search.api.dto.BlogSearchRequest;
 import com.blog.search.api.dto.BlogSearchResult;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,18 +14,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = SearchBlogApiApplication.class)
 class KakaoBlogSearchServiceTest {
     @Autowired
     KakaoBlogSearchApi kakaoBlogSearchApi;
 
     @Test
-    public void searchBlogTest() throws Exception {
+    @DisplayName("KakaoBlogSearchApi 검색 요청 시 정상적으로 결과를 반환한다.")
+    void searchBlogTest() throws Exception {
         // given
         String query = "스프링";
 
         BlogSearchRequest request = BlogSearchRequest.builder()
-                .query("스프링")
+                .query(query)
                 .page(1)
                 .size(10)
                 .build();
