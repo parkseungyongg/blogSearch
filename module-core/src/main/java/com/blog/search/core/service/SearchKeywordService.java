@@ -17,6 +17,10 @@ public class SearchKeywordService {
         this.searchKeywordRepository = searchKeywordRepository;
     }
 
+    /**
+     * 인기 검색어를 조회한다.
+     * @return 인기 검색어 리스트
+     */
     public List<SearchKeywordResponse> getPopularKeywords() {
         List<SearchKeyword> top10ByOrderByCountDesc = searchKeywordRepository.findTop10ByOrderByCountDesc();
 
@@ -34,6 +38,10 @@ public class SearchKeywordService {
         return result;
     }
 
+    /**
+     * 검색어를 업데이트 한다.
+     * @param keyword 검색어
+     */
     public void updateSearchKeyword(String keyword) {
         SearchKeyword searchKeyword = searchKeywordRepository.findByKeyword(keyword);
 

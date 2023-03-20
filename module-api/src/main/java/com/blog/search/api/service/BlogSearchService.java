@@ -3,7 +3,7 @@ package com.blog.search.api.service;
 import com.blog.search.api.dto.BlogSearchRequest;
 import com.blog.search.api.dto.BlogSearchRequestDto;
 import com.blog.search.api.dto.BlogSearchResult;
-import com.blog.search.api.exception.ApiException;
+import com.blog.search.api.exception.BlogSearchException;
 import com.blog.search.core.service.SearchKeywordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,7 @@ public class BlogSearchService {
         }
 
         if(result == null) {
-            throw new ApiException("API 호출중 에러가 발생했습니다. 잠시후 다시 시도해주세요.");
+            throw new BlogSearchException("API 호출중 에러가 발생했습니다. 잠시후 다시 시도해주세요.");
         }
 
         return result;

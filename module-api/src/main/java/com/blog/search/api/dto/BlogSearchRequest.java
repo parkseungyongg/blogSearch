@@ -17,6 +17,11 @@ public class BlogSearchRequest {
     private final Integer size;
     private final BlogSortType sort;
 
+    /**
+     ProviderType에 따라 검색 요청 파라미터를 생성하여 반환한다.
+     @param provider ProviderType (NAVER/KAKAO)
+     @return 생성된 검색 요청 파라미터
+     */
     public MultiValueMap<String, String> toParams(ProviderType provider) {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add(provider.getQueryKey(), query);

@@ -4,7 +4,7 @@ import com.blog.search.SearchBlogApiApplication;
 import com.blog.search.api.dto.BlogSearchRequest;
 import com.blog.search.api.dto.BlogSearchRequestDto;
 import com.blog.search.api.dto.BlogSearchResult;
-import com.blog.search.api.exception.ApiException;
+import com.blog.search.api.exception.BlogSearchException;
 import com.blog.search.api.exception.KakaoApiException;
 import com.blog.search.api.exception.NaverApiException;
 import com.blog.search.core.entity.SearchKeyword;
@@ -55,7 +55,7 @@ class BlogSearchServiceTest {
     }
 
     @Test
-    @DisplayName("모든 Blog Search Api에서 검색 실패시 ApiException이 발생한다.")
+    @DisplayName("모든 Blog Search Api에서 검색 실패시 BlogSearchException이 발생한다.")
     void searchBlogs_allApiFailed_shouldThrowApiException() {
         // given
         when(kakaoBlogSearchApi.searchBlog(any(BlogSearchRequest.class))).thenThrow(new KakaoApiException("kakao api error"));
@@ -69,7 +69,7 @@ class BlogSearchServiceTest {
 
         // when, then
         assertThatThrownBy(() -> blogSearchService.searchBlogs(blogSearchRequestDto))
-                .isInstanceOf(ApiException.class)
+                .isInstanceOf(BlogSearchException.class)
                 .hasMessage("API 호출중 에러가 발생했습니다. 잠시후 다시 시도해주세요.");
     }
 

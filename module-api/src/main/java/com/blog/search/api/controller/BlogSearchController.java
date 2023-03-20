@@ -28,6 +28,12 @@ public class BlogSearchController {
         this.searchKeywordService = searchKeywordService;
     }
 
+    /**
+     * Blog 검색 API 호출 및 결과를 반환한다.
+     *
+     * @param blogSearchRequestDto Blog 검색 요청 DTO 객체
+     * @return Blog 검색 결과
+     */
     @GetMapping("")
     public ResponseEntity<BlogSearchResult> searchBlog(
             @Valid @ModelAttribute BlogSearchRequestDto blogSearchRequestDto) {
@@ -35,6 +41,11 @@ public class BlogSearchController {
         return ResponseEntity.ok(blogSearchResult);
     }
 
+    /**
+     * 인기 검색어 목록을 조회한다.
+     *
+     * @return 인기 검색어 목록
+     */
     @GetMapping("/popular")
     public ResponseEntity<List<SearchKeywordResponse>> getPopularKeywords() {
         List<SearchKeywordResponse> popularKeywords = searchKeywordService.getPopularKeywords();
