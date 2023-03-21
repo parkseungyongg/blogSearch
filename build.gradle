@@ -56,7 +56,7 @@ bootJar {
 
 project(":module-api") {
     bootJar {
-        archivesBaseName = 'kakaobank'
+        archivesBaseName = 'blogsearch'
         mainClass = 'com.blog.search.SearchBlogApiApplication'
     }
     version '1.0.0-SNAPSHOT'
