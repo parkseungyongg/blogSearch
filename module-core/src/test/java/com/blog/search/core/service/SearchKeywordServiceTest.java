@@ -1,7 +1,7 @@
 package com.blog.search.core.service;
 
 import com.blog.search.SearchBlogCoreApplication;
-import com.blog.search.core.dto.SearchKeywordResponse;
+import com.blog.search.core.dto.PopularKeywords;
 import com.blog.search.core.entity.SearchKeyword;
 import com.blog.search.core.repository.SearchKeywordRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -11,8 +11,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,13 +31,13 @@ class SearchKeywordServiceTest {
         searchKeywordService.updateSearchKeyword(keyword);
 
         // when
-        List<SearchKeywordResponse> popularKeywords = searchKeywordService.getPopularKeywords();
+        PopularKeywords popularKeywords = searchKeywordService.getPopularKeywords();
 
         // then
-        assertThat(popularKeywords).isNotEmpty();
-        assertThat(popularKeywords.size()).isEqualTo(1);
-        assertThat(popularKeywords.get(0).getKeyword()).isEqualTo(keyword);
-        assertThat(popularKeywords.get(0).getCount()).isEqualTo(1);
+        assertThat(popularKeywords.getPopularKeywords()).isNotEmpty();
+        assertThat(popularKeywords.getPopularKeywords().size()).isEqualTo(1);
+        assertThat(popularKeywords.getPopularKeywords().get(0).getKeyword()).isEqualTo(keyword);
+        assertThat(popularKeywords.getPopularKeywords().get(0).getCount()).isEqualTo(1);
     }
 
     @Test
@@ -48,11 +46,11 @@ class SearchKeywordServiceTest {
         // given
 
         // when
-        List<SearchKeywordResponse> popularKeywords = searchKeywordService.getPopularKeywords();
+        PopularKeywords popularKeywords = searchKeywordService.getPopularKeywords();
 
         // then
-        assertThat(popularKeywords).isEmpty();
-        assertThat(popularKeywords.size()).isEqualTo(0);
+        assertThat(popularKeywords.getPopularKeywords()).isEmpty();
+        assertThat(popularKeywords.getPopularKeywords().size()).isEqualTo(0);
     }
 
     @Test
@@ -65,11 +63,11 @@ class SearchKeywordServiceTest {
         }
 
         // when
-        List<SearchKeywordResponse> popularKeywords = searchKeywordService.getPopularKeywords();
+        PopularKeywords popularKeywords = searchKeywordService.getPopularKeywords();
 
         // then
-        assertThat(popularKeywords).isNotEmpty();
-        assertThat(popularKeywords.size()).isEqualTo(10);
+        assertThat(popularKeywords.getPopularKeywords()).isNotEmpty();
+        assertThat(popularKeywords.getPopularKeywords().size()).isEqualTo(10);
     }
 
     @Test
@@ -87,15 +85,15 @@ class SearchKeywordServiceTest {
         searchKeywordService.updateSearchKeyword(keywordB);
 
         // when
-        List<SearchKeywordResponse> popularKeywords = searchKeywordService.getPopularKeywords();
+        PopularKeywords popularKeywords = searchKeywordService.getPopularKeywords();
 
         // then
-        assertThat(popularKeywords).isNotEmpty();
-        assertThat(popularKeywords.size()).isEqualTo(2);
-        assertThat(popularKeywords.get(0).getKeyword()).isEqualTo("스프링A");
-        assertThat(popularKeywords.get(0).getCount()).isEqualTo(3);
-        assertThat(popularKeywords.get(1).getKeyword()).isEqualTo("스프링B");
-        assertThat(popularKeywords.get(1).getCount()).isEqualTo(2);
+        assertThat(popularKeywords.getPopularKeywords()).isNotEmpty();
+        assertThat(popularKeywords.getPopularKeywords().size()).isEqualTo(2);
+        assertThat(popularKeywords.getPopularKeywords().get(0).getKeyword()).isEqualTo("스프링A");
+        assertThat(popularKeywords.getPopularKeywords().get(0).getCount()).isEqualTo(3);
+        assertThat(popularKeywords.getPopularKeywords().get(1).getKeyword()).isEqualTo("스프링B");
+        assertThat(popularKeywords.getPopularKeywords().get(1).getCount()).isEqualTo(2);
     }
 
     @Test

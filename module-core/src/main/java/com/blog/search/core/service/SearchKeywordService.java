@@ -1,5 +1,6 @@
 package com.blog.search.core.service;
 
+import com.blog.search.core.dto.PopularKeywords;
 import com.blog.search.core.dto.SearchKeywordResponse;
 import com.blog.search.core.entity.SearchKeyword;
 import com.blog.search.core.repository.SearchKeywordRepository;
@@ -21,12 +22,12 @@ public class SearchKeywordService {
      * 인기 검색어를 조회한다.
      * @return 인기 검색어 리스트
      */
-    public List<SearchKeywordResponse> getPopularKeywords() {
+    public PopularKeywords getPopularKeywords() {
         List<SearchKeyword> top10ByOrderByCountDesc = searchKeywordRepository.findTop10ByOrderByCountDesc();
 
-        List<SearchKeywordResponse> result = new ArrayList<>();
+        List<SearchKeywordResponse> searchKeywordResponseList = new ArrayList<>();
 
-        result.addAll(top10ByOrderByCountDesc
+        searchKeywordResponseList.addAll(top10ByOrderByCountDesc
                 .stream()
                 .map(searchKeyword -> SearchKeywordResponse.builder()
                         .keyword(searchKeyword.getKeyword())
@@ -34,6 +35,9 @@ public class SearchKeywordService {
                         .build()
                 ).collect(Collectors.toList())
         );
+
+        PopularKeywords result = new PopularKeywords(searchKeywordResponseList);
+
 
         return result;
     }
