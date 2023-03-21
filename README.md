@@ -2,7 +2,7 @@
 
 ### 기본 정보
 
-- API 엔드포인트: `/api/v1/search`
+- API 엔드포인트: `/api/v1/search/blog`
 - HTTP 메서드: `GET`
 - HTTP 버전: `HTTP/1.1`
 - 호스트: `localhost:7777`
@@ -51,7 +51,7 @@
 ## Sample
 ### Request
 
-``` curl -X GET 'http://localhost:7777/api/v1/search?query=example&sort=ACCURACY&page=1&size=10' ```
+``` curl -X GET 'http://localhost:7777/api/v1/search/blog?query=example&sort=ACCURACY&page=1&size=10' ```
 
 
 ### Response
@@ -89,7 +89,7 @@
 
 ### 기본 정보
 
-- API 엔드포인트: `/api/v1/search/popular`
+- API 엔드포인트: `/api/v1/search/blog/popular`
 - HTTP 메서드: `GET`
 - HTTP 버전: `HTTP/1.1`
 - 호스트: `localhost:7777`
@@ -104,6 +104,12 @@
 
 인기 검색어는 다음과 같이 검색어로 이루어진 JSON 배열 형태로 반환됩니다.
 
+#### 검색 결과 객체 (Response)
+
+| 필드명 | 타입 | 설명 |
+| --- | --- | --- |
+| `popularKeywords` | Array | 인기 검색어의 목록입니다. |
+
 #### 검색어 객체
 | 필드명 | 타입 | 설명 |
 | --- | --- | --- |
@@ -114,13 +120,13 @@
 
 #### Request
 
-``` curl -X GET 'http://localhost:7777/api/v1/search/popular' ```
+``` curl -X GET 'http://localhost:7777/api/v1/search/blog/popular' ```
 
 #### Response
 
 ```json
 {
-    [
+    "popularKeywords": [
         {
             "keyword": "사과",
             "count": 245
