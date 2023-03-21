@@ -12,6 +12,10 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+repositories {
+    mavenCentral()
+}
+
 subprojects {
     group = 'com.blog'
     version = '0.0.1-SNAPSHOT'
@@ -29,6 +33,10 @@ subprojects {
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        runtimeOnly 'com.h2database:h2'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
     }
 
     tasks.named('test') {
@@ -42,5 +50,23 @@ subprojects {
     }
 }
 
+bootJar {
+    mainClass = 'com.blog.search.SearchBlogApiApplication'
+}
 
+project(":module-api") {
+    bootJar {
+        archivesBaseName = 'kakaobank'
+        mainClass = 'com.blog.search.SearchBlogApiApplication'
+    }
+    version '1.0.0-SNAPSHOT'
+    dependencies{
+        implementation project (':module-core')
+    }
+}
 
+project(":module-core"){
+    jar{
+        enabled = true
+    }
+}
