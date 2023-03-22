@@ -1,3 +1,9 @@
+## 다운로드 링크
+
+[프로젝트 다운로드 링크] https://github.com/parkseungyongg/blogSearch/raw/master/release/blogsearch-0.0.1-SNAPSHOT.jar 
+
+---
+
 ## 1. 블로그 검색 API
 
 ### 기본 정보
